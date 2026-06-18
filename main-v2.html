@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>✨ Corazón Flotante - Edward-Night ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* --- Página base --- */
+    body {
+      background: linear-gradient(135deg, #0a0b10 0%, #1a0f2e 50%, #0d0b1a 100%);
+      min-height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      font-family: 'Outfit', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Efecto de partículas flotantes */
+    body::before {
+      content: '';
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 40%, rgba(157, 78, 221, 0.08) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 70%, rgba(255, 102, 196, 0.08) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* --- Contenedor principal --- */
+    #main-container {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+
+    /* --- Formulario de entrada --- */
+    #form-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 100;
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    #form-container.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(0.8) rotate(-5deg);
+    }
+
+    h1 {
+      background: linear-gradient(135deg, #FF66C4, #9D4EDD, #00E5FF);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 3rem;
+      text-shadow: 0 0 30px rgba(157, 78, 221, 0.5);
+      letter-spacing: 2px;
+      animation: titleGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes titleGlow {
+      0%, 100% { filter: brightness(1); }
+      50% { filter: brightness(1.2); text-shadow: 0 0 40px rgba(255, 102, 196, 0.8); }
+    }
+
+    /* --- Contenedor del formulario unificado --- */
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      background: rgba(15, 13, 26, 0.8);
+      backdrop-filter: blur(10px);
+      border: 2px solid #9D4EDD;
+      border-radius: 60px;
+      box-shadow: 0 0 30px rgba(157, 78, 221, 0.3);
+      padding: 6px 6px 6px 32px;
+      max-width: 550px;
+      margin: 0 auto;
+      transition: all 0.4s ease;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: #FF66C4;
+      box-shadow: 0 0 40px rgba(255, 102, 196, 0.5);
+      transform: scale(1.02);
+    }
+
+    #name-input {
+      flex: 1;
+      padding: 16px 20px;
+      font-size: 1.15rem;
+      font-family: 'Outfit', sans-serif;
+      background: transparent;
+      border: none;
+      color: #fff;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    #name-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 300;
+    }
+
+    #create-btn {
+      padding: 14px 36px;
+      font-size: 1.8rem;
+      font-weight: 400;
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(135deg, #9D4EDD, #FF66C4);
+      border: none;
+      border-radius: 60px;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 20px rgba(157, 78, 221, 0.4);
+      flex-shrink: 0;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #create-btn:hover {
+      transform: scale(1.08) rotate(2deg);
+      box-shadow: 0 8px 35px rgba(255, 102, 196, 0.6);
+      background: linear-gradient(135deg, #B870FF, #FF77CC);
+    }
+
+    #create-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* --- Corazón animado --- */
+    #heart-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    #heart-container.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #ui .love {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -225px 0 0 -225px;
+      --i: 1;
+      filter: drop-shadow(0 0 5px rgba(157, 78, 221, 0.5));
+    }
+
+    #ui .love_word {
+      color: #FF66C4;
+      font-size: 1.5rem;
+      transform: translateY(-100%) rotateZ(-30deg);
+      text-shadow: 0 0 8px #9D4EDD, 0 0 12px rgba(255, 102, 196, 0.5);
+      letter-spacing: 2px;
+      white-space: nowrap;
+      font-weight: 600;
+      background: rgba(15, 13, 26, 0.3);
+      backdrop-filter: blur(4px);
+      padding: 6px 14px;
+      border-radius: 50px;
+      border: 1px solid rgba(157, 78, 221, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    /* Colores aleatorios para las palabras */
+    #ui .love_word[data-color="0"] { color: #9D4EDD; text-shadow: 0 0 10px #9D4EDD; }
+    #ui .love_word[data-color="1"] { color: #FF66C4; text-shadow: 0 0 10px #FF66C4; }
+    #ui .love_word[data-color="2"] { color: #00E5FF; text-shadow: 0 0 10px #00E5FF; }
+    #ui .love_word[data-color="3"] { color: #B8B8FF; text-shadow: 0 0 10px #B8B8FF; }
+
+    #ui .love_horizontal {
+      animation: horizontal 12000ms infinite alternate ease-in-out;
+      animation-delay: calc(var(--i) * -400ms);
+    }
+    #ui .love_vertical {
+      animation: vertical 22000ms infinite linear;
+      animation-delay: calc(var(--i) * -400ms);
+    }
+
+    /* --- Botón de volver --- */
+    #back-btn {
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Outfit', sans-serif;
+      background: rgba(15, 13, 26, 0.8);
+      backdrop-filter: blur(10px);
+      border: 2px solid #9D4EDD;
+      border-radius: 40px;
+      color: #9D4EDD;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 101;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #back-btn.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #back-btn:hover {
+      background: linear-gradient(135deg, #9D4EDD, #FF66C4);
+      color: #fff;
+      border-color: #FF66C4;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 25px rgba(157, 78, 221, 0.5);
+    }
+
+    /* --- Créditos actualizados --- */
+    .credits {
+      position: fixed;
+      bottom: 25px;
+      right: 30px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+      z-index: 101;
+      font-weight: 400;
+      background: rgba(15, 13, 26, 0.6);
+      backdrop-filter: blur(8px);
+      padding: 8px 18px;
+      border-radius: 40px;
+      border: 1px solid rgba(157, 78, 221, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .credits:hover {
+      border-color: #FF66C4;
+      box-shadow: 0 0 20px rgba(255, 102, 196, 0.2);
+    }
+
+    .credits a {
+      color: #FF66C4;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .credits a:hover {
+      color: #9D4EDD;
+      text-shadow: 0 0 8px #FF66C4;
+      text-decoration: none;
+    }
+
+    /* --- Animaciones --- */
+    @keyframes horizontal {
+      from { transform: translateX(0px); }
+      to   { transform: translateX(550px); }
+    }
+
+    @keyframes vertical {
+      0%   { transform: translateY(180px); }
+      10%  { transform: translateY(45px); }
+      15%  { transform: translateY(4.5px); }
+      18%  { transform: translateY(0px); }
+      20%  { transform: translateY(4.5px); }
+      22%  { transform: translateY(34.61538px); }
+      24%  { transform: translateY(64.28571px); }
+      25%  { transform: translateY(112.5px); }
+      26%  { transform: translateY(64.28571px); }
+      28%  { transform: translateY(34.61538px); }
+      30%  { transform: translateY(4.5px); }
+      32%  { transform: translateY(0px); }
+      35%  { transform: translateY(4.5px); }
+      40%  { transform: translateY(45px); }
+      50%  { transform: translateY(180px); }
+      71%  { transform: translateY(428.57143px); }
+      72.5%{ transform: translateY(441.17647px); }
+      75%  { transform: translateY(450px); }
+      77.5%{ transform: translateY(441.17647px); }
+      79%  { transform: translateY(428.57143px); }
+      100% { transform: translateY(180px); }
+    }
+
+    /* Animación de entrada para las palabras */
+    @keyframes wordPop {
+      0% { opacity: 0; transform: translateY(-100%) rotateZ(-30deg) scale(0.5); }
+      100% { opacity: 1; transform: translateY(-100%) rotateZ(-30deg) scale(1); }
+    }
+
+    #ui .love_word {
+      animation: wordPop 0.5s ease-out forwards;
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+      }
+      
+      .input-wrapper {
+        max-width: 85vw;
+        padding: 5px 5px 5px 20px;
+      }
+
+      #name-input {
+        font-size: 0.95rem;
+        padding: 12px 12px;
+      }
+
+      #create-btn {
+        font-size: 1.3rem;
+        padding: 12px 24px;
+      }
+
+      .credits {
+        font-size: 10px;
+        padding: 6px 14px;
+        bottom: 15px;
+        right: 15px;
+      }
+
+      #back-btn {
+        padding: 8px 20px;
+        font-size: 0.85rem;
+        top: 15px;
+        left: 15px;
+      }
+
+      #ui .love_word {
+        font-size: 1.1rem;
+        padding: 4px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="main-container">
+    <!-- Formulario inicial -->
+    <div id="form-container">
+      <h1>✨ Mi corazón por ti ✨</h1>
+      <div class="input-wrapper">
+        <input 
+          type="text" 
+          id="name-input" 
+          placeholder="Escribe un nombre especial..." 
+          maxlength="30"
+        />
+        <button id="create-btn">💜</button>
+      </div>
+    </div>
+
+    <!-- Botón para volver -->
+    <button id="back-btn">← Volver</button>
+
+    <!-- Credits actualizados -->
+    <div class="credits">
+      ✨ hecho por <a href="#" target="_blank" rel="noopener noreferrer">Edward-Night</a> ✨
+    </div>
+
+    <!-- Contenedor del corazón -->
+    <div id="heart-container">
+      <div id="ui"></div>
+    </div>
+  </div>
+
+  <script>
+    // Configuración personalizable
+    const CONFIG = {
+      elementsCount: 120,          // Número de elementos flotantes
+      defaultMessage: '❤️',        // Mensaje por defecto
+      colors: ['#9D4EDD', '#FF66C4', '#00E5FF', '#B8B8FF'],
+      emojis: ['💜', '✨', '💕', '🌟', '❤️', '💖', '🌙', '⭐', '💫', '🌸']
+    };
+
+    const ui = document.getElementById('ui');
+    const formContainer = document.getElementById('form-container');
+    const heartContainer = document.getElementById('heart-container');
+    const nameInput = document.getElementById('name-input');
+    const createBtn = document.getElementById('create-btn');
+    const backBtn = document.getElementById('back-btn');
+
+    // Función para crear el corazón con mensajes personalizados
+    function createHeart(userText) {
+      // Limpiar corazón anterior
+      ui.innerHTML = '';
+      
+      // Determinar el texto a mostrar (puede ser el nombre o un mensaje decorativo)
+      let baseText = userText || CONFIG.defaultMessage;
+      
+      // Si el texto es muy largo, acortarlo
+      if (baseText.length > 20) {
+        baseText = baseText.substring(0, 18) + '...';
+      }
+      
+      // Crear elementos flotantes con variedad
+      for (let i = 1; i <= CONFIG.elementsCount; i++) {
+        const love = document.createElement('div');
+        love.className = 'love';
+        love.style.setProperty('--i', i);
+        
+        // Variar el mensaje: a veces usar emojis, a veces el texto
+        let displayText;
+        const randomType = Math.random();
+        
+        if (randomType < 0.3) {
+          // Usar emoji aleatorio
+          displayText = CONFIG.emojis[Math.floor(Math.random() * CONFIG.emojis.length)];
+        } else if (randomType < 0.6 && userText) {
+          // Usar el texto del usuario
+          displayText = baseText;
+        } else {
+          // Usar mensajes de amor variados
+          const loveMessages = ['Te quiero', '💕', 'Eres mágico/a', '✨', 'Hermoso/a', '💖', 'Mi todo', '🌟', 'Te amo'];
+          displayText = loveMessages[Math.floor(Math.random() * loveMessages.length)];
+        }
+        
+        // Color aleatorio
+        const randomColor = CONFIG.colors[Math.floor(Math.random() * CONFIG.colors.length)];
+        
+        // Tamaño aleatorio
+        const randomSize = 0.9 + Math.random() * 0.8;
+        
+        const h = document.createElement('div');
+        h.className = 'love_horizontal';
+        
+        const v = document.createElement('div');
+        v.className = 'love_vertical';
+        
+        const word = document.createElement('div');
+        word.className = 'love_word';
+        word.textContent = displayText;
+        word.style.color = randomColor;
+        word.style.fontSize = `${randomSize}rem`;
+        word.style.animationDelay = `${Math.random() * 0.5}s`;
+        
+        // Para emojis, ajustar estilo
+        if (displayText.match(/[💜✨💕❤️💖🌙🌟⭐💫🌸]/)) {
+          word.style.background = 'transparent';
+          word.style.border = 'none';
+          word.style.fontSize = `${randomSize + 0.4}rem`;
+          word.style.padding = '0';
+          word.style.textShadow = `0 0 10px ${randomColor}`;
+        }
+        
+        v.appendChild(word);
+        h.appendChild(v);
+        love.appendChild(h);
+        ui.appendChild(love);
+      }
+    }
+
+    // Evento del botón crear
+    createBtn.addEventListener('click', () => {
+      const name = nameInput.value.trim();
+      createHeart(name);
+      
+      // Ocultar formulario y mostrar corazón
+      formContainer.classList.add('hidden');
+      heartContainer.classList.add('visible');
+      backBtn.classList.add('visible');
+    });
+
+    // Enter en el input
+    nameInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        createBtn.click();
+      }
+    });
+
+    // Botón volver
+    backBtn.addEventListener('click', () => {
+      formContainer.classList.remove('hidden');
+      heartContainer.classList.remove('visible');
+      backBtn.classList.remove('visible');
+      nameInput.value = '';
+      nameInput.focus();
+    });
+
+    // Focus inicial
+    nameInput.focus();
+  </script>
+</body>
+</html>
